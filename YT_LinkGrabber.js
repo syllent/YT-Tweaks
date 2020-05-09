@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT LinkGrabber
 // @namespace    YT
-// @version      1.0.3
+// @version      1.0.4
 // @description  fk u
 // @author       BogLev
 // @require      http://code.jquery.com/jquery-3.5.1.min.js
@@ -138,9 +138,9 @@
         element.style.color = 'white';
         element.style.backgroundColor = color;
         UI.appendChild(element);
-	    //setTimeout(function(){
-        //	UI.removeChild(element);
-        //}, 500);
+	setTimeout(function(){
+        	UI.removeChild(element);
+        }, 500);
     };
 
     function saveTextAsFile()
