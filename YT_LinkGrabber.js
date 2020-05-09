@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT LinkGrabber
 // @namespace    YT
-// @version      1.0.2
+// @version      1.0.3
 // @description  fk u
 // @author       BogLev
 // @require      http://code.jquery.com/jquery-3.5.1.min.js
@@ -33,7 +33,7 @@
     UI.style.flexDirection = 'column';
     UI.style.alignItems = 'baseline';
     UI.style.justifyContent = 'flex-start';
-    UI.style.width = '150px';
+    UI.style.width = '160px';
     UI.style.height = '100px';
     fixedUI.appendChild(UI);
 
@@ -82,6 +82,7 @@
 
     $(document).on('keydown', function(e) {
         if (e.keyCode == 90 && e.ctrlKey) {
+            msgShow('Отмена', 'pink');
             var undo = list.pop();
             undo = undo.replace('https://www.youtube.com', "");
             var element = document.querySelectorAll('a[class="yt-simple-endpoint style-scope ytd-video-renderer"][href="'+undo+'"]')[0];
@@ -122,28 +123,24 @@
         if(element.getAttribute('href')!= null){
             var href = 'https://www.youtube.com' + element.getAttribute('href');
             list.push(href);
-            msgShow('Ссылка скопирована', true);
+            msgShow('Ссылка скопирована', 'green');
         }else{
-            msgShow('Ссылка НЕ скопирована', false);
+            msgShow('Ссылка НЕ скопирована', 'red');
         }
     };
-    function msgShow(msg, bool) {
+    function msgShow(msg, color) {
         var element = document.createElement('P');
         element.class = 'msgGrabber';
         element.innerHTML = msg;
-        element.style.fontSize = '14px';
+        element.style.fontSize = '15px';
         element.style.margin = '3px';
         element.style.zIndex = 99999;
         element.style.color = 'white';
-        if(bool){
-            element.style.backgroundColor = 'green';
-        }else{
-            element.style.backgroundColor = 'red';
-        }
+        element.style.backgroundColor = color;
         UI.appendChild(element);
-	    setTimeout(function(){
-        	UI.removeChild(element);
-        }, 500);
+	    //setTimeout(function(){
+        //	UI.removeChild(element);
+        //}, 500);
     };
 
     function saveTextAsFile()
