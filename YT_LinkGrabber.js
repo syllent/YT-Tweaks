@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name         YT LinkGrabber
 // @namespace    YT
-// @version      1.0
+// @version      1.0.1
 // @description  fk u
 // @author       BogLev
 // @require      http://code.jquery.com/jquery-3.5.1.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.2/babel.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.16.0/polyfill.js
 // @downloadURL  https://github.com/syllent/YTLinkGrabber/raw/master/YT_LinkGrabber.js
+// @updateURL	 https://github.com/syllent/YTLinkGrabber/raw/master/YT_LinkGrabber.js
 // @match        https://*.youtube.com/*
 // @grant        none
 // ==/UserScript==
