@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT LinkGrabber
 // @namespace    YT
-// @version      1.0.3.1
+// @version      1.0.4
 // @description  fk u
 // @author       BogLev
 // @require      http://code.jquery.com/jquery-3.5.1.min.js
