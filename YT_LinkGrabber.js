@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT LinkGrabber
 // @namespace    YT
-// @version      1.0.5
+// @version      1.1.0
 // @description  fk u
 // @author       BogLev
 // @require      http://code.jquery.com/jquery-3.5.1.min.js
@@ -58,27 +58,26 @@
     tumblerContainer.appendChild(tumblerLabel);
 
     var copyButton = document.createElement('INPUT');
+    copyButton.id = 'copyButton';
     copyButton.type = 'submit';
     copyButton.value = 'Скопировать';
     copyButton.style.margin = '3px';
     copyButton.style.width = '9em';
     copyButton.style.fontSize = '15px';
     copyButton.onclick = function(){
-        var result = '';
-        list.forEach(function(str) {
-            result += str +'\n';
-        });
-        var tempResult = document.createElement('textarea');
-        tempResult.value = result;
-        tempResult.setAttribute('readonly', '');
-        tempResult.show = false;
-        UI.appendChild(tempResult);
-        tempResult.select();
-        document.execCommand('copy');
-        UI.removeChild(tempResult);
-        alert('Ссылки скопированы в буфер обмена:\n'+result);
+        copyToClipBoard();
     };
-    copyButton.id = 'tumbler';
+
+    var clearButton = document.createElement('INPUT');
+    clearButton.id = 'clearButton';
+    clearButton.type = 'submit';
+    clearButton.value = 'Очистить';
+    clearButton.style.margin = '3px';
+    clearButton.style.width = '9em';
+    clearButton.style.fontSize = '15px';
+    clearButton.onclick = function(){
+        clear();
+    };
 
     $(document).on('keydown', function(e) {
         if (e.keyCode == 90 && e.ctrlKey) {
@@ -89,9 +88,13 @@
         }
     });
 
-    var control = false;
     $(document).on('keydown', function(e) {
-        control = e.altKey;
+        if (e.keyCode == 67 && e.ctrlKey) {
+            copyToClipBoard();
+        }
+    });
+
+    $(document).on('keydown', function(e) {
         if (e.altKey && e.ctrlKey && e.shiftKey) {
             saveTextAsFile();
         }
@@ -99,9 +102,19 @@
 
     $('#tumbler').bind('input', function() {
         if(tumbler.checked){
-            tumblerLabel.innerHTML = 'Включено';
             UI.appendChild(copyButton);
+            UI.appendChild(clearButton);
             //yt-simple-endpoint style-scope ytd-video-renderer
+            $(document).on('scroll', function() {
+                $('.ytd-video-renderer a').on('click', function(e){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    extractURL(this);
+                    var element = this;
+                    element.style.backgroundColor = 'red';
+                });
+            });
             $('.ytd-video-renderer a').on('click', function(e){
                 e.preventDefault();
                 e.stopPropagation();
@@ -110,25 +123,27 @@
                 var element = this;
                 element.style.backgroundColor = 'red';
             });
+            tumblerLabel.innerHTML = 'Включено';
         }else{
             tumblerLabel.innerHTML = 'Выключено';
             UI.removeChild(copyButton);
+            UI.removeChild(clearButton);
+            $(document).off();
             $('.ytd-video-renderer a').off();
-            list.forEach(function(entry) {
-                var undo = entry.replace('https://www.youtube.com', "");
-                var element = document.querySelectorAll('a[class="yt-simple-endpoint style-scope ytd-video-renderer"][href="'+undo+'"]')[0];
-                element.removeAttribute('style');
-            });
+            clear();
             msgShow('Выключено', 'red');
-            list = [];
         }
     });
 
     function extractURL(element) {
         if(element.getAttribute('href')!= null){
             var href = 'https://www.youtube.com' + element.getAttribute('href');
-            list.push(href);
-            msgShow('Ссылка скопирована', 'green');
+            if (!list.includes(href)){
+                list.push(href);
+                msgShow('Ссылка скопирована', 'green');
+            } else{
+                msgShow('Ссылка УЖЕ скопирована', 'red');
+            }
         }else{
             msgShow('Ссылка НЕ скопирована', 'red');
         }
@@ -148,8 +163,33 @@
         }, 500);
     };
 
-    function saveTextAsFile()
-    {
+    function clear(){
+        list.forEach(function(entry) {
+            var undo = entry.replace('https://www.youtube.com', "");
+            var element = document.querySelectorAll('a[class="yt-simple-endpoint style-scope ytd-video-renderer"][href="'+undo+'"]')[0];
+            element.removeAttribute('style');
+        });
+        list = [];
+        msgShow('Очищено', 'pink');
+    }
+
+    function copyToClipBoard() {
+        var result = '';
+        list.forEach(function(str) {
+            result += str +'\n';
+        });
+        var tempResult = document.createElement('textarea');
+        tempResult.value = result;
+        tempResult.setAttribute('readonly', '');
+        tempResult.show = false;
+        UI.appendChild(tempResult);
+        tempResult.select();
+        document.execCommand('copy');
+        UI.removeChild(tempResult);
+        alert('Ссылки скопированы в буфер обмена:\n'+result);
+    }
+
+    function saveTextAsFile() {
         var result = '';
         list.forEach(function(str) {
             result += str +'\n';
