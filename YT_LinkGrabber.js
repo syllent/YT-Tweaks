@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT LinkGrabber
 // @namespace    YT
-// @version      1.0.4
+// @version      1.0.5
 // @description  fk u
 // @author       BogLev
 // @require      http://code.jquery.com/jquery-3.5.1.min.js
@@ -82,11 +82,10 @@
 
     $(document).on('keydown', function(e) {
         if (e.keyCode == 90 && e.ctrlKey) {
-            msgShow('Отмена', 'pink');
-            var undo = list.pop();
-            undo = undo.replace('https://www.youtube.com', "");
+            var undo = list.pop().replace('https://www.youtube.com', "");
             var element = document.querySelectorAll('a[class="yt-simple-endpoint style-scope ytd-video-renderer"][href="'+undo+'"]')[0];
             element.removeAttribute('style');
+            msgShow('Отмена', 'pink');
         }
     });
 
@@ -115,6 +114,12 @@
             tumblerLabel.innerHTML = 'Выключено';
             UI.removeChild(copyButton);
             $('.ytd-video-renderer a').off();
+            list.forEach(function(entry) {
+                var undo = entry.replace('https://www.youtube.com', "");
+                var element = document.querySelectorAll('a[class="yt-simple-endpoint style-scope ytd-video-renderer"][href="'+undo+'"]')[0];
+                element.removeAttribute('style');
+            });
+            msgShow('Выключено', 'red');
             list = [];
         }
     });
