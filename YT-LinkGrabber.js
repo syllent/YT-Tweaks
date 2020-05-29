@@ -7,8 +7,8 @@
 // @require      http://code.jquery.com/jquery-3.5.1.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.2/babel.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.16.0/polyfill.js
-// @downloadURL  https://github.com/syllent/YTLinkGrabber/raw/master/YT_LinkGrabber.js
-// @updateURL	 https://github.com/syllent/YTLinkGrabber/raw/master/YT_LinkGrabber.js
+// @downloadURL  https://github.com/syllent/YT-Tweaks/raw/master/YT-LinkGrabber.js
+// @updateURL	 https://github.com/syllent/YT-Tweaks/raw/master/YT-LinkGrabber.js
 // @match        https://*.youtube.com/*
 // @grant        none
 // ==/UserScript==
