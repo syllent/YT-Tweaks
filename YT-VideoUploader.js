@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT VideoUploader
 // @namespace    YT
-// @version      1.0.0
+// @version      1.0.1
 // @description  fk u
 // @author       BogLev
 // @require      http://code.jquery.com/jquery-3.5.1.min.js
