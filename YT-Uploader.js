@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         YT VideoUploader
+// @name         YT Uploader
 // @namespace    YT
 // @version      1.0.1
 // @description  fk u
@@ -7,8 +7,8 @@
 // @require      http://code.jquery.com/jquery-3.5.1.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.2/babel.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.16.0/polyfill.js
-// @downloadURL  https://github.com/syllent/YT-Tweaks/raw/master/YT-VideoUploader.js
-// @updateURL	 https://github.com/syllent/YT-Tweaks/raw/master/YT-VideoUploader.js
+// @downloadURL  https://github.com/syllent/YT-Tweaks/raw/master/YT-Uploader.js
+// @updateURL	 https://github.com/syllent/YT-Tweaks/raw/master/YT-Uploader.js
 // @match        https://*.youtube.com/*
 // @match        https://www.random.org/
 // @grant        window.close
