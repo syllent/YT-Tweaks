@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT Uploader
 // @namespace    YT
-// @version      1.0.2
+// @version      1.0.3
 // @description  fk u
 // @author       BogLev
 // @require      http://code.jquery.com/jquery-3.5.1.min.js
@@ -50,19 +50,7 @@
     UI.appendChild(chanelTextArea);
     $(chanelTextArea).hide();
 
-    var startButton = document.createElement('INPUT');
-    startButton.id = 'YT-Tweak-startUploadingButton';
-    startButton.type = 'submit';
-    startButton.value = 'test';
-    startButton.style.margin = '3px';
-    startButton.style.width = '9em';
-    startButton.style.fontSize = '15px';
-    startButton.onclick = function(){
-        videoInfoChanger();
-    };
-    UI.appendChild(startButton);
-
-    var Tabs = 5;
+    var Tabs = 1;
     var windowTitle;
     var count = 0;
     var windowFocus = false;
@@ -162,6 +150,8 @@
     });
 
     function videoInfoChanger(){
+        count = 0;
+        clickQuery('ytcp-icon-button.style-scope.ytcp-uploads-mini-indicator');
         setTimeout(function() {
             var videosPerPage = document.querySelector('span.dropdown-trigger-text.style-scope.ytcp-text-dropdown-trigger');
             if(videosPerPage.innerHTML == 30){
@@ -177,7 +167,7 @@
                 if (e.originalEvent.attrName === "class") {
                     if (e.target.className=='loaded style-scope ytcp-app') {
                         setTimeout(function() {
-                            if(videosPerPage.innerHTML == 50 && count < 1){
+                            if(videosPerPage.innerHTML == 50 && count == 0){
                                 count++;
                                 setDescription();
                             }
@@ -185,11 +175,9 @@
                                 count++;
                                 setTags();
                             }
-                            else if(count > 1){
-                                alert('test2');
+                            else if(count == 2){
                                 var el = document.querySelector('span.page-description.style-scope.ytcp-table-footer').innerHTML;
                                 if (el.search('1–50') != -1){
-                                    alert('1–50');
                                     count = 0;
                                     clickQuery('ytcp-icon-button.rtl-flip.style-scope.ytcp-table-footer#navigate-after');
                                 }
@@ -216,9 +204,9 @@
                             clickQuery('paper-item.paper-item.style-scope.ytcp-text-menu#text-item-2[test-id=SET_TO]');
                             setTimeout(function() {
                                 document.querySelector('textarea.style-scope.ytcp-form-textarea').focus();
-                                setTimeout(function() {
-                                    windowTitle = document.title;
-                                    document.title = 'DESCRIPTION';
+                                windowTitle = document.title;
+                                document.title = 'DESCRIPTION';
+                                $('textarea.style-scope.ytcp-form-textarea').on('input', function() {
                                     setTimeout(function() {
                                         document.title = windowTitle;
                                         setTimeout(function() {
@@ -231,7 +219,7 @@
                                             }, 1000);
                                         }, 1000);
                                     }, 1000);
-                                }, 500);
+                                });
                             }, 2000);
                         }, 500);
                     }, 500);
@@ -241,8 +229,6 @@
     }
     function setTags(){
         setTimeout(function() {
-            clickQuery('ytcp-checkbox-lit.style-scope.ytcp-table-header#selection-checkbox');
-            setTimeout(function() {
                 clickQuery('ytcp-dropdown-trigger.style-scope.ytcp-text-dropdown-trigger');
                 setTimeout(function() {
                     clickQuery('paper-item.paper-item.style-scope.ytcp-text-menu#text-item-2[test-id=TAGS]');
@@ -252,28 +238,24 @@
                             clickQuery('paper-item.paper-item.style-scope.ytcp-text-menu#text-item-1[test-id=SET_TO]');
                             setTimeout(function() {
                                 document.querySelector('input.text-input.style-scope.ytcp-chip-bar#text-input').focus();
-                                setTimeout(function() {
-                                    windowTitle = document.title;
-                                    document.title = 'TAGS';
+                                windowTitle = document.title;
+                                document.title = 'TAGS';
+                                $('input.text-input.style-scope.ytcp-chip-bar#text-input').on('input', function() {
+                                    document.title = windowTitle;
                                     setTimeout(function() {
-                                        document.title = windowTitle;
+                                        clickQuery('ytcp-button.chain-edit-button.style-scope.ytcp-bulk-actions#submit-button');
                                         setTimeout(function() {
-                                            clickQuery('ytcp-button.chain-edit-button.style-scope.ytcp-bulk-actions#submit-button');
+                                            clickQuery('ytcp-paper-checkbox.style-scope.ytcp-checkbox#paper-checkbox');
                                             setTimeout(function() {
-                                                clickQuery('ytcp-paper-checkbox.style-scope.ytcp-checkbox#paper-checkbox');
-                                                setTimeout(function() {
-                                                    clickQuery('ytcp-button.style-scope.ytcp-confirmation-dialog#confirm-button');
-                                                }, 1000);
-
+                                                clickQuery('ytcp-button.style-scope.ytcp-confirmation-dialog#confirm-button');
                                             }, 1000);
-                                        }, 500);
-                                    }, 1000);
-                                }, 200);
+                                        }, 1000);
+                                    }, 500);
+                                });
                             }, 2000);
                         }, 500);
                     }, 500);
                 }, 1000);
-            }, 500);
         }, 1000);
     }
     function clickQuery(QuerySelector){
