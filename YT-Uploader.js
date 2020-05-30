@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT Uploader
 // @namespace    YT
-// @version      1.0.1
+// @version      1.0.2
 // @description  fk u
 // @author       BogLev
 // @require      http://code.jquery.com/jquery-3.5.1.min.js
@@ -13,6 +13,9 @@
 // @match        https://www.random.org/
 // @grant        window.close
 // @grant        GM_addStyle
+// @grant        GM_setValue
+// @grant        GM_getValue
+// @grant        GM_addValueChangeListener
 // ==/UserScript==
 
 (function() {
@@ -59,11 +62,10 @@
     };
     UI.appendChild(startButton);
 
-
+    var Tabs = 5;
     var windowTitle;
     var count = 0;
     var windowFocus = false;
-    var uploadDone =false;
     window.onfocus = function() { windowFocus = true; };
     window.onblur = function() { windowFocus = false; };
 
@@ -90,7 +92,7 @@
            }, 200);
         }
         else if(document.URL.includes('https://www.youtube.com/account')) {
-            for (var i = 0; i < 2; i++) {
+            for (var i = 1; i < Tabs; i++) {
                 window.open('https://www.youtube.com/upload', '_blank');
             }
             window.open('https://www.youtube.com/upload', '_self');
@@ -109,13 +111,14 @@
                     if (windowFocus) {
                         $('span.count.style-scope.ytcp-uploads-mini-indicator').on('DOMCharacterDataModified', function (e1) {
                             if(e1.target.innerHTML=='Загрузка завершена' || e1.target.innerHTML=='Uploads complete'){
-                                videoInfoChanger();
-                                uploadDone = true;
+                                upload.count += 1;
                             }
                         });
                     } else {
                         $('span.count.style-scope.ytcp-uploads-mini-indicator').on('DOMCharacterDataModified', function (e1) {
                             if(e1.target.innerHTML=='Загрузка завершена' || e1.target.innerHTML=='Uploads complete'){
+                                var text = Math.floor(Math.random() * 0x10000 /* 65536 */).toString(16);
+                                GM_sendMessage('_.unique.name.greetings', text, window.location.href);
                                 setTimeout(function(){ window.close() }, 2000);
                             }
                         });
@@ -123,6 +126,39 @@
                 }
             });
         }
+    });
+
+    var upload = {
+        countInt: 0,
+        countListener: function(val) {},
+        set count(val) {
+          this.countInt = val;
+          this.countListener(val);
+        },
+        get count() {
+          return this.countInt;
+        },
+        registerListener: function(listener) {
+          this.countListener = listener;
+        }
+    }
+    upload.registerListener(function(val) {
+        if (val == Tabs)
+        {
+            videoInfoChanger();
+        }
+    });
+    function GM_onMessage(label, callback) {
+      GM_addValueChangeListener(label, function() {
+        callback.apply(undefined, arguments[2]);
+      });
+    }
+    function GM_sendMessage(label) {
+      GM_setValue(label, Array.from(arguments).slice(1));
+    }
+    GM_onMessage('_.unique.name.greetings', function(src, message) {
+        console.log('[onMessage]', src, '=>', message);
+        upload.count += 1;
     });
 
     function videoInfoChanger(){
