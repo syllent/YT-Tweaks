@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT Uploader
 // @namespace    YT
-// @version      1.0.3
+// @version      1.0.4
 // @description  fk u
 // @author       BogLev
 // @require      http://code.jquery.com/jquery-3.5.1.min.js
@@ -50,7 +50,19 @@
     UI.appendChild(chanelTextArea);
     $(chanelTextArea).hide();
 
-    var Tabs = 1;
+    var startButton = document.createElement('INPUT');
+    startButton.id = 'YT-Tweak-startUploadingButton';
+    startButton.type = 'submit';
+    startButton.value = 'test';
+    startButton.style.margin = '3px';
+    startButton.style.width = '9em';
+    startButton.style.fontSize = '15px';
+    startButton.onclick = function(){
+        videoInfoChanger();
+    };
+    UI.appendChild(startButton);
+
+    var Tabs = 5;
     var windowTitle;
     var count = 0;
     var windowFocus = false;
@@ -99,6 +111,7 @@
                     if (windowFocus) {
                         $('span.count.style-scope.ytcp-uploads-mini-indicator').on('DOMCharacterDataModified', function (e1) {
                             if(e1.target.innerHTML=='Загрузка завершена' || e1.target.innerHTML=='Uploads complete'){
+                                alert('start video ifno change');
                                 upload.count += 1;
                             }
                         });
@@ -168,22 +181,26 @@
                     if (e.target.className=='loaded style-scope ytcp-app') {
                         setTimeout(function() {
                             if(videosPerPage.innerHTML == 50 && count == 0){
+                                console.log('loaded 1');
                                 count++;
                                 setDescription();
                             }
                             else if(count == 1){
+                                console.log('loaded 2');
                                 count++;
                                 setTags();
                             }
                             else if(count == 2){
+                                console.log('loaded 3');
                                 var el = document.querySelector('span.page-description.style-scope.ytcp-table-footer').innerHTML;
                                 if (el.search('1–50') != -1){
+                                    alert('1–50');
                                     count = 0;
                                     clickQuery('ytcp-icon-button.rtl-flip.style-scope.ytcp-table-footer#navigate-after');
                                 }
                             }
                             else {
-                                alert(count);
+                                console.log('loaded ' + count);
                             }
                         }, 500);
                     }
@@ -207,18 +224,16 @@
                                 windowTitle = document.title;
                                 document.title = 'DESCRIPTION';
                                 $('textarea.style-scope.ytcp-form-textarea').on('input', function() {
+                                    document.title = windowTitle;
                                     setTimeout(function() {
-                                        document.title = windowTitle;
+                                        clickQuery('ytcp-button.chain-edit-button.style-scope.ytcp-bulk-actions#submit-button');
                                         setTimeout(function() {
-                                            clickQuery('ytcp-button.chain-edit-button.style-scope.ytcp-bulk-actions#submit-button');
+                                            clickQuery('ytcp-paper-checkbox.style-scope.ytcp-checkbox#paper-checkbox');
                                             setTimeout(function() {
-                                                clickQuery('ytcp-paper-checkbox.style-scope.ytcp-checkbox#paper-checkbox');
-                                                setTimeout(function() {
-                                                    clickQuery('ytcp-button.style-scope.ytcp-confirmation-dialog#confirm-button');
-                                                }, 1000);
+                                                clickQuery('ytcp-button.style-scope.ytcp-confirmation-dialog#confirm-button');
                                             }, 1000);
                                         }, 1000);
-                                    }, 1000);
+                                    }, 700);
                                 });
                             }, 2000);
                         }, 500);
@@ -229,6 +244,8 @@
     }
     function setTags(){
         setTimeout(function() {
+            clickQuery('ytcp-checkbox-lit.style-scope.ytcp-table-header#selection-checkbox');
+            setTimeout(function() {
                 clickQuery('ytcp-dropdown-trigger.style-scope.ytcp-text-dropdown-trigger');
                 setTimeout(function() {
                     clickQuery('paper-item.paper-item.style-scope.ytcp-text-menu#text-item-2[test-id=TAGS]');
@@ -250,17 +267,18 @@
                                                 clickQuery('ytcp-button.style-scope.ytcp-confirmation-dialog#confirm-button');
                                             }, 1000);
                                         }, 1000);
-                                    }, 500);
+                                    }, 700);
                                 });
                             }, 2000);
                         }, 500);
                     }, 500);
                 }, 1000);
+            }, 500);
         }, 1000);
     }
     function clickQuery(QuerySelector){
         if (document.querySelector(QuerySelector) == null){
-            console.log(QuerySelector+' click error');
+            console.log('click error: ' + QuerySelector);
             setTimeout(function() { clickQuery(QuerySelector) }, 100);
         }
         else {
@@ -268,7 +286,7 @@
             setTimeout(function() {
                 try{
                     document.querySelector(QuerySelector).click();
-                    console.log('click');
+                    console.log('click: ' + QuerySelector);
                 }
                 catch(e){
                     alert(e);
