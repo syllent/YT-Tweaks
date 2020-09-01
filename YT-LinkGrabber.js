@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         YT LinkGrabber
 // @namespace    YT
-// @version      1.1.0
-// @description  fk u
+// @version      1.1.1
+// @description  easy copy links in yt
 // @author       BogLev
 // @require      http://code.jquery.com/jquery-3.5.1.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.18.2/babel.js
@@ -79,6 +79,11 @@
         clear();
     };
 
+    var linkCounter = 0;
+    var linkCountLabel = document.createElement('LABEL');
+    linkCountLabel.style.fontSize = '15px';
+    linkCountLabel.innerHTML = linkCounter;
+
     $(document).on('keydown', function(e) {
         if (e.keyCode == 90 && e.ctrlKey) {
             var undo = list.pop().replace('https://www.youtube.com', "");
@@ -104,6 +109,7 @@
         if(tumbler.checked){
             UI.appendChild(copyButton);
             UI.appendChild(clearButton);
+            UI.appendChild(linkCountLabel);
             //yt-simple-endpoint style-scope ytd-video-renderer
             $(document).on('scroll', function() {
                 $('.ytd-video-renderer a').on('click', function(e){
@@ -141,6 +147,8 @@
             if (!list.includes(href)){
                 list.push(href);
                 msgShow('Ссылка скопирована', 'green');
+                linkCounter += 1;
+                linkCountLabel.innerHTML = linkCounter;
             } else{
                 msgShow('Ссылка УЖЕ скопирована', 'red');
             }
@@ -170,6 +178,7 @@
             element.removeAttribute('style');
         });
         list = [];
+        linkCounter = 0;
         msgShow('Очищено', 'pink');
     }
 
