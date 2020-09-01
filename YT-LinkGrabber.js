@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT LinkGrabber
 // @namespace    YT
-// @version      1.1.1
+// @version      1.1.2
 // @description  easy copy links in yt
 // @author       BogLev
 // @require      http://code.jquery.com/jquery-3.5.1.min.js
@@ -134,6 +134,7 @@
             tumblerLabel.innerHTML = 'Выключено';
             UI.removeChild(copyButton);
             UI.removeChild(clearButton);
+            UI.removeChild(linkCountLabel);
             $(document).off();
             $('.ytd-video-renderer a').off();
             clear();
@@ -179,6 +180,7 @@
         });
         list = [];
         linkCounter = 0;
+        linkCountLabel.innerHTML = linkCounter;
         msgShow('Очищено', 'pink');
     }
 
